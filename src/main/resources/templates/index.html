@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="pl-Pl">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista Zadań (Quests)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f4f9; }
+        table { border-collapse: collapse; width: 100%; margin-bottom: 30px; background: #fff; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #333; }
+        th a { color: white; text-decoration: none; display: block; }
+        th a:hover { text-decoration: underline; }
+        .form-container { background: #fff; padding: 20px; border: 1px solid #ddd; width: 400px; }
+        input, button { margin-bottom: 10px; width: 100%; padding: 8px; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #218838; }
+        .actions a { margin-right: 10px; color: #007bff; text-decoration: none; }
+        .actions a.delete { color: #dc3545; }
+    </style>
+</head>
+<body>
+
+<h2>Zarządzanie Zadaniami</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th><a th:href="@{'/?sortBy=id&direction=' + ${reverseSortDir}}">ID</a></th>
+        <th><a th:href="@{'/?sortBy=name&direction=' + ${reverseSortDir}}">Nazwa</a></th>
+        <th><a th:href="@{'/?sortBy=description&direction=' + ${reverseSortDir}}">Opis</a></th>
+        <th><a th:href="@{'/?sortBy=startDate&direction=' + ${reverseSortDir}}">Data Rozpoczęcia</a></th>
+        <th><a th:href="@{'/?sortBy=endDate&direction=' + ${reverseSortDir}}">Data Zakończenia</a></th>
+        <th><a th:href="@{'/?sortBy=completed&direction=' + ${reverseSortDir}}">Ukończone</a></th>
+        <th>Akcje</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="q : ${questsList}">
+        <td th:text="${q.id}"></td>
+        <td th:text="${q.name}"></td>
+        <td th:text="${q.description}"></td>
+        <td th:text="${q.startDate}"></td>
+        <td th:text="${q.endDate}"></td>
+        <td th:text="${q.completed ? 'Tak' : 'Nie'}"></td>
+        <td class="actions">
+            <a th:href="@{'/ui/edit/' + ${q.id}}">Edytuj</a>
+            <a class="delete" th:href="@{'/ui/delete/' + ${q.id}}" onclick="return confirm('Usunąć to zadanie?');">Usuń</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="form-container">
+    <h3 th:text="${quest.id == null ? 'Dodaj nowe zadanie' : 'Edytuj zadanie'}"></h3>
+
+    <form th:action="@{/ui/save}" th:object="${quest}" method="post">
+        <input type="hidden" th:field="*{id}" />
+
+        <label>Nazwa:</label>
+        <label>
+            <input type="text" th:field="*{name}" required />
+        </label>
+
+        <label>Opis:</label>
+        <label>
+            <input type="text" th:field="*{description}" />
+        </label>
+
+        <label>Data Rozpoczęcia:</label>
+        <label>
+            <input type="date" th:field="*{startDate}" />
+        </label>
+
+        <label>Data Zakończenia:</label>
+        <label>
+            <input type="date" th:field="*{endDate}" />
+        </label>
+
+        <label>Ukończone:</label>
+        <label>
+            <input type="checkbox" th:field="*{completed}" style="width: auto;" />
+        </label>
+        <br><br>
+
+        <button type="submit">Zapisz</button>
+        <a th:if="${quest.id != null}" th:href="@{/static}" style="display:block; text-align:center; margin-top:10px;">Anuluj edycję</a>
+    </form>
+</div>
+
+</body>
+</html>
