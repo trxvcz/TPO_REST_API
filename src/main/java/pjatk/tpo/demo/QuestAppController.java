@@ -8,11 +8,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/data")
-public class ToDoAppController {
+public class QuestAppController {
 
     private final QuestsService service;
 
-    public ToDoAppController(QuestsService service) {
+    public QuestAppController(QuestsService service) {
         this.service = service;
     }
 
